@@ -12,12 +12,18 @@ Firebase made a little bit easier.
 import SimpleFirebase from "./pathTo/simple-firebase.js"
 
 const firebaseConfig = {
-    // Paste your firebase configuration data
+    /* Paste your firebase configuration data */ 
 }
 
 const sfire = new SimpleFirebase(firebaseConfig) //default firestorePort=8080
 
 ```
+
+Under `sfire` you have available for more control:
+- `firebase` by accessing `sfire.FBS`;
+- `firebase.firestore()` by accessing `sfire.DB`;
+- `firebase.auth()` by accessing `sfire.AUTH`;
+- `firebase.storage()` by accessing `sfire.STORE`;
 
 
 ## Firestore 
