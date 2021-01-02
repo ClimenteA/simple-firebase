@@ -22,8 +22,11 @@ const sfire = new SimpleFirebase(firebaseConfig)
 
 ## Firestore 
 
-To make things simpler thing of a collection as a table and a document a row in that collection.
-Each document in a collection has an Id like each row in a table has an Id. 
+A collection is similar to a table.
+An document is similar to a table row.
+A field is similar to a column.
+A collection can have multiple documents like a table can have multiple rows.
+Each document has an ID like each row in a table has an ID.
 
 
 - **ADD** a new document to a collection with a AUTO GENERATED ID
