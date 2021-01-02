@@ -2,7 +2,7 @@
 Firebase made a little bit easier. 
 
 
-#### Instalation
+## Instalation
 
 - Download file `simple-firebase.js` to your firebase application folder (you must have firebase installed with npm along with firebase-emulator);
 - Initialize the library with your firebase config data;
@@ -20,7 +20,7 @@ const sfire = new SimpleFirebase(firebaseConfig)
 ```
 
 
-#### Firestore 
+## Firestore 
 
 To make things simpler thing of a collection as a table and a document a row in that collection.
 Each document in a collection has an Id like each row in a table has an Id. 
@@ -81,7 +81,7 @@ let deleted_id = await sfire.delete("collection_name", generated_id)
 ```
 
 
-#### Storage 
+## Storage 
 
 Files will be uploaded automatically in a folder named `files` with a prefix id by default to avoid overwrites (this id can be disabled).
 
@@ -122,7 +122,7 @@ You can later construct the downloadURL or use the `downloadURL` from this objec
 await sfire.deleteFile(downloadData1.path)
 ```
 
-#### Authentification 
+## Authentification 
 
 Save `logged` variable to the store of your choosed front-end framework.
 Later, you can check based on `logged` variable if the user is logged in or not.
@@ -158,7 +158,7 @@ sfire.deleteUser()
 ```
 
 
-#### TODO
+## TODO
 
 - add pagination for `find` method (probably by using generators)
 - list collections and files (probably just a simple `collectionList` and `fileList` collection in firestore)
