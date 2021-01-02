@@ -4,7 +4,7 @@ Firebase made a little bit easier.
 
 ## Instalation
 
-- Download file `simple-firebase.js` to your firebase application folder (you must have firebase installed with npm along with firebase-emulator);
+- Download file [`simple-firebase.js`](https://raw.githubusercontent.com/ClimenteA/simple-firebase/main/simple-firebase.js) to your firebase application folder (you must have firebase installed with npm along with firebase-emulator);
 - Initialize the library with your firebase config data;
 
 ```js
