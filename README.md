@@ -22,11 +22,14 @@ const sfire = new SimpleFirebase(firebaseConfig)
 
 ## Firestore 
 
-A collection is similar to a table.
-An document is similar to a table row.
-A field is similar to a column.
-A collection can have multiple documents like a table can have multiple rows.
-Each document has an ID like each row in a table has an ID.
+In firestore: 
+- A collection is similar to a table;
+- A document is similar to a table row;
+- A field is similar to a column;
+- A collection can have multiple documents the same way a table can have multiple rows;
+- Each document has an ID the same way each row in a table has one.
+
+Collections can have endless sub-collections, but I try to keep it simple and keep for one collection just one or more documents.
 
 
 - **ADD** a new document to a collection with a AUTO GENERATED ID
@@ -165,6 +168,7 @@ sfire.deleteUser()
 
 - add pagination for `find` method (probably by using generators)
 - list collections and files (probably just a simple `collectionList` and `fileList` collection in firestore)
+- automatic generation of security rules (limit fields, prohibid writes if user was the one who added the document, limit generation of collections)
 
 **Feel free to fork it and improve it!**
 
