@@ -8,7 +8,7 @@ import "firebase/analytics" // Optional
 
 export default class SimpleFirebase {
 
-    constructor(firebaseConfig, emulatorPort=5005) {
+    constructor(firebaseConfig, firestorePort=8080) {
         firebase.initializeApp(firebaseConfig)
         this.FBS = firebase
         this.DB = firebase.firestore()
@@ -17,7 +17,7 @@ export default class SimpleFirebase {
         this.query_operators = ["<", "<=", "==", ">", ">=", "!=", "array-contains", "array-contains-any", "in", "not-in"]
 
         if (location.hostname === "localhost") {
-            this.DB.settings({ host: `localhost:${emulatorPort}`, ssl: false })
+            this.DB.settings({ host: `localhost:${firestorePort}`, ssl: false })
         }
 
         // Ugly, bind is required in order to call methods in the class (without this I get weird errors)

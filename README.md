@@ -15,7 +15,7 @@ const firebaseConfig = {
     // Paste your firebase configuration data
 }
 
-const sfire = new SimpleFirebase(firebaseConfig)
+const sfire = new SimpleFirebase(firebaseConfig) //default firestorePort=8080
 
 ```
 
