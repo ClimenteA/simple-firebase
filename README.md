@@ -120,7 +120,7 @@ The result from the `uploadFile` method it's a json object like:
 }
 ```
 
-You can later construct the downloadURL or use the `downloadURL` from this object.
+You can later construct the downloadURL from `path` or use the `downloadURL` given.
 
 
 - **DELETE a file** 
