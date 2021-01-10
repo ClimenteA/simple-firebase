@@ -1,24 +1,11 @@
-import firebase from "firebase/app"
-import "firebase/firestore"
-import "firebase/auth"
-import "firebase/storage"
-import "firebase/performance" // Optional
-import "firebase/analytics" // Optional
+class SimpleFirebase {
 
-
-export default class SimpleFirebase {
-
-    constructor(firebaseConfig, firestorePort=8080) {
-        firebase.initializeApp(firebaseConfig)
+    constructor() {
         this.FBS = firebase
         this.DB = firebase.firestore()
         this.AUTH = firebase.auth()
         this.STORE = firebase.storage()
         this.query_operators = ["<", "<=", "==", ">", ">=", "!=", "array-contains", "array-contains-any", "in", "not-in"]
-
-        if (location.hostname === "localhost") {
-            this.DB.settings({ host: `localhost:${firestorePort}`, ssl: false })
-        }
 
         // Ugly, bind is required in order to call methods in the class (without this I get weird errors)
         this.add = this.add.bind(this)
@@ -187,3 +174,7 @@ export default class SimpleFirebase {
 
 }
 
+
+if (firebase) {
+    f = new SimpleFirebase()
+}

@@ -1,0 +1,23 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "anunturi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "judet",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "localitate",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "buget",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

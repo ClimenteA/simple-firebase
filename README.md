@@ -4,26 +4,28 @@ Firebase made a little bit easier.
 
 ## Instalation
 
-- Download file [`simple-firebase.js`](https://raw.githubusercontent.com/ClimenteA/simple-firebase/main/simple-firebase.js) to your firebase application folder (you must have firebase installed with npm along with firebase-emulator);
-- Initialize the library with your firebase config data;
+- Download file [`simple-firebase.js`](https://raw.githubusercontent.com/ClimenteA/simple-firebase/main/simple-firebase.js) to your public folder (where files are compiled);
+- Add `simple-firebase.js` after firebase inititialization (`firebase` object needs to be available globaly);
 
-```js
+```html
 
-import SimpleFirebase from "./pathTo/simple-firebase.js"
-
-const firebaseConfig = {
-    /* Paste your firebase configuration data */ 
-}
-
-const sfire = new SimpleFirebase(firebaseConfig) //default firestorePort=8080
+<!-- update the version number as needed or add files from gstatic -->
+<script defer src="/__/firebase/8.2.2/firebase-app.js"></script>
+<!-- include only the Firebase features as you need -->
+<script defer src="/__/firebase/8.2.2/firebase-auth.js"></script>
+<script defer src="/__/firebase/8.2.2/firebase-firestore.js"></script>
+<script defer src="/__/firebase/8.2.2/firebase-storage.js"></script>
+<!-- make sure you use the emulator for debuging -->
+<script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<script defer src="path/to/simple-firebase.js"></script>
 
 ```
 
-Under `sfire` you have available for more control:
-- `firebase` by accessing `sfire.FBS`;
-- `firebase.firestore()` by accessing `sfire.DB`;
-- `firebase.auth()` by accessing `sfire.AUTH`;
-- `firebase.storage()` by accessing `sfire.STORE`;
+Under `f` you have available for more control:
+- `firebase` by accessing `f.FBS`;
+- `firebase.firestore()` by accessing `f.DB`;
+- `firebase.auth()` by accessing `f.AUTH`;
+- `firebase.storage()` by accessing `f.STORE`;
 
 
 ## Firestore 

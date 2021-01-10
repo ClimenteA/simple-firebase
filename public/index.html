@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple firebase</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
+    
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/8.2.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/8.2.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/8.2.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/8.2.2/firebase-storage.js"></script>
+    <script defer src="/__/firebase/8.2.2/firebase-analytics.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script defer src="simple-firebase.js"></script>
+  </head>
+  <body>
+
+
+<section x-data="handleTime()" x-init="init()" class="hidden">
+  <h1>Timer with Alpine js</h1>
+  <span x-text="time"></span>
+
+<script>
+function handleTime(){  
+  return {
+    time: 0,
+    init() {
+      setInterval(() => {
+        this.time = this.time + 1
+      }, 1000)
+    }
+  }
+}
+</script>
+
+</section>
+
+
+<section class="p-10" x-data="handleData()">
+
+<h1 class="border-b-2 font-semibold mb-6 text-2xl">Firestore</h1>
+
+<p class="mb-6 text-gray-600">Adding some data</p>
+
+<form @submit.prevent="handleSubmit" class="flex flex-col gap-4 max-w-md">
+
+    <label for="city" class="flex flex-col">
+      <span>Add city</span>
+      <input type="text" name="city" id="city" class="border-2">
+    </label>
+
+    <label for="moveDate" class="flex flex-col">
+      <span>Move Date</span>
+      <input type="date" name="moveDate" id="moveDate" class="border-2">
+    </label>
+
+    <button type="submit" class="bg-blue-400 py-2">Add data</button>
+
+</form>
+
+<p class="text-gray-600 mt-2" x-text="status"></p>
+
+<script>
+
+function handleData(){
+  
+  function getFromData(event) {
+    let form_data = new FormData(event.target)
+    return Object.fromEntries(form_data)
+  }
+
+  return {
+    status: "Waiting for your input...",
+    async handleSubmit(event) {
+      event.preventDefault()
+      let form_data = getFromData(event)
+      let res = await f.add("myCollection", form_data)
+      this.status = "Document created with ID: " + res
+    }
+  }
+}
+
+</script>
+
+</section>
+
+
+<!-- Authorization -->
+
+<!-- <h1>AUTH</h1>
+
+<section>
+
+    <p>Logged in</p>
+    <p>Logged out</p>
+
+
+    <button on:click={f.facebookLogin} class="button is-primary">
+        Login
+    </button>
+
+    <button on:click={f.logoutUser} class="button is-primary">
+        Logout
+    </button>
+
+    <button on:click={f.deleteUser} class="button is-primary">
+        Delete account
+    </button>
+
+</section> -->
+
+
+
+
+<!-- Uploading a file -->
+
+<!-- 
+<h1>STORAGE</h1>
+
+<section>
+
+    <form on:submit|preventDefault={uploadFile}>
+        
+        <label for="afile">
+            <input type="file" name="afile" id="afile">
+        </label>
+
+        <button type="submit">
+            Upload
+        </button>
+
+    </form>
+
+</section>     -->
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+// Examples
+
+async function playWithFirestore() {
+
+  // FIRESTORE
+
+  // Add a new document to a collection with a auto-generated ID
+  let generated_id = await f.add("collection_name", {"field_1": "value_1", "field_2": "value_2"})
+  console.log("Auto-generated ID: ", generated_id)
+
+
+  // Add a new document to a collection with a custom ID
+  let custom_id = await f.add("collection_name", {"_id": "my_unique_id", "field_1": "value_1", "field_2": "value_2"})
+  console.log("Custom ID: ", custom_id)
+
+
+  // Update documents from a collection without specifing the ID.  
+  let updated_ids = await f.update("collection_name", {"field_1": "value_1"}, {"field_1": "value_1_updated"})
+  console.log("Updated IDs list:", updated_ids)
+
+
+  // Update a document from a collection by specified ID
+  let updated_id = await f.update("collection_name", {"_id": custom_id, "field_2": "value_2_updated"})
+  console.log("Updated ID:", updated_id)
+
+
+  // Find documents in a collection without specifing the ID 
+  let docList = await f.find("collection_name", {"field_2": "value_2_updated"})
+  console.log("Found docs:", docList)
+
+
+  // Find a document in a collection based on document ID
+  let doc = await f.find("collection_name", custom_id)
+  console.log("Found doc:", doc)
+
+
+  // Added a timeout just to see if data was added
+  setTimeout(async () => {
+    // Delete a document from a collection without specifing the ID
+    let deleted_ids = await f.delete("collection_name", {"field_2": "value_2_updated"})
+    console.log("Deleted doc IDs:", deleted_ids)
+  }, 8000)
+
+
+  setTimeout(async () => {
+    // Delete a document from a collection with a specified ID
+    let deleted_id = await f.delete("collection_name", generated_id)
+    console.log("Deleted doc ID:", deleted_id)
+  }, 8000)
+
+
+}
+
+
+// playWithFirestore()
+
+
+async function uploadFile(event) {
+  let form_data = new FormData(event.target)
+  form_data = Object.fromEntries(form_data)
+
+  let downloadData1 = await f.uploadFile(form_data.afile)
+  console.log("Data:", downloadData1)
+
+  let downloadData2 = await f.uploadFile(form_data.afile, "NewFolder")
+  console.log("Data folder specified:", downloadData2)
+
+  let downloadData3 = await f.uploadFile(form_data.afile, undefined, "MyfileName.pdf")
+  console.log("Data fileName specified:", downloadData3)
+
+  let downloadData4 = await f.uploadFile(form_data.afile, "NewFolder", "MyfileName.pdf", false)
+  console.log("Data folder, filename speficied, generateID disabled:", downloadData4)
+
+  // Added a timeout just to see if data was added
+  setTimeout( async() => {
+    await f.deleteFile(downloadData1.path)
+    await f.deleteFile(downloadData2.path)
+    await f.deleteFile(downloadData3.path)
+    await f.deleteFile(downloadData4.path)
+    console.log("Files 1,2,3,4 deleted:", downloadData1.path, downloadData2.path, downloadData3.path, downloadData4.path)
+  }, 8000)
+  
+}
+
+
+let logged
+  f.AUTH.onAuthStateChanged(user => {
+  if (user) logged = true
+  else logged = false 
+})
+
+
+//endloaded
+})
+</script>
+  </body>
+</html>
