@@ -4,7 +4,7 @@ Firebase made a little bit easier.
 
 ## Instalation
 
-- Download file [`simple-firebase.js`](https://raw.githubusercontent.com/ClimenteA/simple-firebase/main/simple-firebase.js) to your public folder (where files are compiled);
+- Download file [`simple-firebase.js`](./public/simple-firebase.js) to your public folder (where files are compiled);
 - Add `simple-firebase.js` after firebase inititialization (`firebase` object needs to be available globaly);
 
 ```html
