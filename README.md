@@ -37,89 +37,114 @@ In firestore:
 - A collection can have multiple documents the same way a table can have multiple rows;
 - Each document has an ID the same way each row in a table has one.
 
-Collections can have endless sub-collections, but I try to keep it simple and keep for one collection just one or more documents.
+Collections can have endless sub-collections. Almost each function under `f` is a promise you can use `await` or `then` syntax on them.  
 
+### Add document(s)
 
-- **ADD a new document to a collection with a AUTO GENERATED ID**
 ```js
-let generated_id = await sfire.add("collection_name", {"field_1": "value_1", "field_2": "value_2"})
-```
 
-- **ADD a new document to a collection with a CUSTOM ID**
+let myDoc = {
+    "_id": "my_unique_id", 
+    "field_1": "value_1", 
+    "field_2": "value_2"
+}
+
+let custom_id = await f.add("collectionName", myDoc)
+
+```
+This creates a new collection (if not present) and adds `myDoc` to it with a custom ID (`"_id"`). If ID is already present this will replace existing data with the one added.
+
+
 ```js
-let custom_id = await sfire.add("collection_name", {"_id": "my_unique_id", "field_1": "value_1", "field_2": "value_2"})
+
+let myDoc1 = {
+    "field_1": "value_1", 
+    "field_2": "value_2"
+}
+
+let generated_id = await f.add("collectionName", myDoc1)
+
 ```
-Field `"_id"` will hold the Id of the document.
-The `add` method will return the document Id, so you can do additional work with it if needed. 
+This creates a new collection (if not present) and adds `myDoc1` to it with a auto-generated ID by firebase. 
+
+The "_id" field is created for both cases in the document (similar to MongoDB Atlas).
+
+The `add` method will return the ID of the generated document so you can do aditional work with it.
 
 
-- **UPDATE documents from a collection WITHOUT specifing the ID**
+### Update document(s)
+
 ```js
-let updated_ids = await sfire.update("collection_name", {"field_1": "value_1"}, {"field_1": "value_1_updated"})
+
+let myOldDoc = {"field_1": "value_1"}
+let myNewDoc = {"field_1": "value_1_updated"}
+
+let updated_ids = await f.update("collectionName", myOldDoc, myNewDoc)
+
 ```
-`updated_ids` will be a list of updated id's, where collection fields matched.
+This will update the document(s) in the collection where `field_1` has `value_1` with the new value for `field_1`. If `field_1` is not found, update will be skipped and `updated_ids` will be an empty list.
 
 
-- **UPDATE ONE document from a collection by the specified `_id`**
 ```js
-let updated_id = await sfire.update("collection_name", {"_id": custom_id, "field_2": "value_2_updated"})
+
+let myNewDoc1 = {
+    "_id": custom_id, 
+    "field_2": 
+    "value_2_updated"
+}
+
+let updated_id = await f.update("collectionName", myNewDoc1)
+
 ```
-`updated_id` is `"_id"` specified.
+This will the document with the `"_id"` specified.
 
 
-- **FIND documents in a collection**     
+### Find document(s)
+
 ```js   
-let docList = await sfire.find("collection_name", {"field_2": "value_2_updated"})
+
+let fDoc = {"field_2": "value_2_updated"}
+let docList = await f.find("collectionName", fDoc)
+
 ```
-The result will be a list of documents.
-`find` method will construct a `where` query based on the fields and values provided.
-As a third parameter of find function you can change the default "==" query parameter with another 
-firestore where query parameters 
-`["<", "<=", "==", ">", ">=", "!=", "array-contains", "array-contains-any", "in", "not-in"]`
+The `find` method will fetch all documents from `collectionName` where `field_2` has value `value_2_updated`. The third parameter of `find` method is a query parameter, by default is `==`. 
 
 
-- **FIND a document in a collection based on document ID**
 ```js
-let doc = await sfire.find("collection_name", custom_id)
-```
 
-- **DELETE a document from a collection without specifing the ID**
+let doc = await f.find("collectionName", custom_id)
+
+```
+You can also fetch a document from a colection by it's ID.
+
+
+### Delete document(s)
+
 ```js
-let deleted_ids = await sfire.delete("collection_name", {"field_2": "value_2_updated"})
-```
-The result will be a list of Id's where field and value matched in the collection.
 
-- **DELETE a document from a collection with a specified ID**
+let dDoc = {"field_2": "value_2_updated"}
+let deleted_ids = await f.delete("collectionName", dDoc)
+
+```
+The `delete` method will delete all documents from `collectionName` where `field_2` has value `value_2_updated`.
+
+
 ```js
-let deleted_id = await sfire.delete("collection_name", generated_id)
+
+let deleted_id = await f.delete("collectionName", IDToDelete)
+
 ```
+This will delete only the document with given ID.
 
 
-## Storage 
 
-Files will be uploaded automatically in a folder named `files` with a prefix id by default to avoid overwrites (this id can be disabled).
+### Upload file(s)
 
-
-- **UPLOAD a file to `files` folder**
 ```js
-let downloadData1 = await sfire.uploadFile(afile)
-```
 
-- **UPLOAD a file to `NewFolder` folder**
-```js
-let downloadData2 = await sfire.uploadFile(afile, "NewFolder")
-```
+let downloadData1 = await f.uploadFile(afile)
 
-- **UPLOAD a file to default `files` folder but with a custom name `MyfileName.pdf` for the file**
-```js
-let downloadData3 = await sfire.uploadFile(afile, undefined, "MyfileName.pdf")
 ```
-
-- **UPLOAD a file to `NewFolder` folder with a custom name `MyfileName.pdf` for the file**
-```js
-let downloadData4 = await sfire.uploadFile(afile, "NewFolder", "MyfileName.pdf", false)
-```
-
 The result from the `uploadFile` method it's a json object like:
 ```js
 {
@@ -127,56 +152,141 @@ The result from the `uploadFile` method it's a json object like:
     downloadURL: "https://firebasestorage.googleapis.com/v0/b/other-data/token=etc"
 }
 ```
-
 You can later construct the downloadURL from `path` or use the `downloadURL` given.
 
 
-- **DELETE a file** 
+Files will be uploaded automatically in a folder named `files` with a prefix id by default to avoid file overwrites. The auto generated ID can be disabled by setting `uploadFile` method paramteter `generateID` to `false`. You can also set a custom `folder` or `fileName` if needed.
+
 ```js
-await sfire.deleteFile(downloadData1.path)
+
+let downloadData = await f.uploadFile(
+    fileObj, 
+    folder=undefined, 
+    fileName=undefined, 
+    generateID=true
+)
+
 ```
+
+### Delete file
+
+```js
+
+await f.deleteFile(downloadData1.path)
+
+```
+
 
 ## Authentification 
 
-- **Initialisation**
+
+### Check user auth status
+
 ```js
 let logged
-sfire.AUTH.onAuthStateChanged(user => {
+f.AUTH.onAuthStateChanged(user => {
     if (user) logged = true
     else logged = false 
 })
 ```
-
 Save `logged` variable to the store of your choosed front-end framework.
 Later, you can check based on `logged` variable if the user is logged in or not.
 
 
-- **LOGIN/REGISTER with Facebook and Google**
-```js
-sfire.facebookLogin() 
-// OR
-sfire.googleLogin()
-```
+### Login/Register user (with Facebook, Google)
 
+```js
+
+f.facebookLogin() 
+// OR
+f.googleLogin()
+
+```
 This methods will automatically create if not present a `users` collection and save email and name in a document with user's id (`uid`).
 
 
-- **LOGOUT user**
+### Logout user
 ```js
-sfire.logoutUser()
+
+f.logoutUser()
+
 ```
 
-- **DELETE current logged user**
+### Delete authenticated user
 ```js
-sfire.deleteUser()
+
+f.deleteUser()
+
 ```
 
 
-## TODO
+
+# TODO
+
+- Make it posibile to add/update a list of documents (by using [batch](https://stackoverflow.com/questions/54322153/how-to-add-multiple-docs-to-a-collection-in-firebase)) 
+
+```js
+
+//ADD
+
+let myListofDocs = [
+    {"field_1": "value_1", "field_2": "value_2"},
+    {"field_1": "value_1", "field_2": "value_2"},
+    {"field_1": "value_1", "field_2": "value_2"},
+]
+
+let generated_ids = await f.add("collectionName", myListofDocs)
+
+//UPDATE
+let myListofOldDocs = [
+    {"field_1": "value_1", "field_2": "value_2"},
+    {"field_1": "value_1", "field_2": "value_2"},
+    {"field_1": "value_1", "field_2": "value_2"},
+]
+
+let myListofNewDocs = [
+    {"field_1": "value_1_updated", "field_2": "value_2_updated"},
+    {"field_1": "value_1_updated", "field_2": "value_2_updated"},
+    {"field_1": "value_1_updated", "field_2": "value_2_updated"},
+]
+
+let updated_ids = await f.update("collectionName", myListofOldDocs, myListofNewDocs)
+
+```
+
+- Make it posible to upload in batches also, move parameters in a object.
+- Maybe return just the path? and construct downloadUrl when needed
+
+```js
+
+// list of file objects with folder, fileName or generateID specified
+
+let filesToUpload = [
+    {fileObj},
+    {fileObj, folder:"profilePics"},
+    {fileObj, folder:"productPics", fileName:"boneBreaker"},
+    {fileObj, folder:"productVid", fileName:"how to use it.mp4", generateID:false}   
+]
+
+let downloadData = await f.uploadFiles(filesToUpload)
+
+// list of file objects
+
+let downloadData = await f.uploadFiles([fileObj1, fileObj2 etc])
+
+
+```
+
+- Delete files in batch
+
+```js
+
+await f.deleteFiles([downloadData1.path, downloadData2.path])
+
+```
 
 - add pagination for `find` method (probably by using generators)
 - list collections and files (probably just a simple `collectionList` and `fileList` collection in firestore)
 - automatic generation of security rules (limit fields, prohibid writes if user was the one who added the document, limit generation of collections)
 
 **Feel free to fork it and improve it!**
-
