@@ -1,11 +1,13 @@
 # Simple-firebase
 Firebase made a little bit easier. 
+Most common tasks for any application is to process data, save data to a database, modifying data and retrieve it when needed. 
+I put together a simple utility library which helps with CRUD operations (files and data) + Authentication.
 
 
-## Instalation
+## Instalation:
 
 - Download file [`simple-firebase.js`](https://raw.githubusercontent.com/ClimenteA/simple-firebase/main/public/simple-firebase.js) to your public folder (where files are compiled);
-- Add `simple-firebase.js` after firebase inititialization (`firebase` object needs to be available globaly);
+- Add `simple-firebase.js` after firebase inititialization (`firebase` object needs to be available globaly).
 
 ```html
 
@@ -21,14 +23,11 @@ Firebase made a little bit easier.
 
 ```
 
-Under `f` you have available for more control:
+Under `f` you have the following:
 - `firebase` by accessing `f.FBS`;
 - `firebase.firestore()` by accessing `f.DB`;
 - `firebase.auth()` by accessing `f.AUTH`;
-- `firebase.storage()` by accessing `f.STORE`;
-
-
-## Firestore 
+- `firebase.storage()` by accessing `f.STORE`.
 
 In firestore: 
 - A collection is similar to a table;
@@ -37,7 +36,7 @@ In firestore:
 - A collection can have multiple documents the same way a table can have multiple rows;
 - Each document has an ID the same way each row in a table has one.
 
-Collections can have endless sub-collections. Almost each function under `f` is a promise you can use `await` or `then` syntax on them.  
+Collections can have endless sub-collections. Almost each function under `f` is a promise and you can use `await` or `then` syntax on them.  
 
 ### Add document(s)
 
@@ -52,7 +51,7 @@ let myDoc = {
 let custom_id = await f.add("collectionName", myDoc)
 
 ```
-This creates a new collection (if not present) and adds `myDoc` to it with a custom ID (`"_id"`). If ID is already present this will replace existing data with the one added.
+This creates a new collection (if not present) and adds `myDoc` to it with a custom ID (`"_id"`). If ID is already present, this will replace the existing data with the new one.
 
 
 ```js
@@ -65,11 +64,11 @@ let myDoc1 = {
 let generated_id = await f.add("collectionName", myDoc1)
 
 ```
-This creates a new collection (if not present) and adds `myDoc1` to it with a auto-generated ID by firebase. 
+The code from above creates a new collection (if not present already) and adds `myDoc1` to it with an auto-generated ID made by firebase. 
 
 The "_id" field is created for both cases in the document (similar to MongoDB Atlas).
 
-The `add` method will return the ID of the generated document so you can do aditional work with it.
+The `add` method will return the ID of the generated document so you can do additional work with it.
 
 
 ### Update document(s)
@@ -87,7 +86,7 @@ let myNewDoc = {
 let updated_ids = await f.update("collectionName", myOldDoc, myNewDoc)
 
 ```
-This will update the document(s) in the collection where `field_1` has `value_1` with the new value for `field_1`. If `field_1` is not found, update will be skipped and `updated_ids` will be an empty list.
+This will update the document(s) in the collection where `field_1` has `value_1` with the new value for `field_1`. If `field_1` is not found, the update will be skipped and `updated_ids` will be an empty list.
 
 
 ```js
@@ -101,7 +100,7 @@ let myNewDoc1 = {
 let updated_id = await f.update("collectionName", myNewDoc1)
 
 ```
-This will the document with the `"_id"` specified.
+This will update the document with the `"_id"` specified.
 
 
 ### Find document(s)
@@ -116,7 +115,7 @@ let fDoc = {
 let docList = await f.find("collectionName", fDoc)
 
 ```
-The `find` method will fetch all documents from `collectionName` where `field_2` has value `value_2_updated`. The third parameter of `find` method is a query parameter, by default is `==`. 
+The `find` method will fetch all documents from `collectionName` where `field_2` has the value `value_2_updated`. The third parameter of `find` method is a query parameter, which by default is `==`. 
 
 
 ```js
@@ -124,7 +123,7 @@ The `find` method will fetch all documents from `collectionName` where `field_2`
 let doc = await f.find("collectionName", custom_id)
 
 ```
-You can also fetch a document from a colection by it's ID.
+You can also fetch a document from a collection by its ID.
 
 
 ### Delete document(s)
@@ -138,7 +137,7 @@ let dDoc = {
 let deleted_ids = await f.delete("collectionName", dDoc)
 
 ```
-The `delete` method will delete all documents from `collectionName` where `field_2` has value `value_2_updated`.
+The `delete` method will delete all documents from `collectionName` where `field_2` has the value `value_2_updated`.
 
 
 ```js
@@ -146,7 +145,7 @@ The `delete` method will delete all documents from `collectionName` where `field
 let deleted_id = await f.delete("collectionName", IDToDelete)
 
 ```
-This will delete only the document with given ID.
+This will delete only the document with the given ID.
 
 
 
@@ -164,10 +163,10 @@ The result from the `uploadFile` method it's a json object like:
     downloadURL: "https://firebasestorage.googleapis.com/v0/b/other-data/token=etc"
 }
 ```
-You can later construct the downloadURL from `path` or use the `downloadURL` given.
+You can later construct the downloadURL from `path` or use the given `downloadURL`.
 
 
-Files will be uploaded automatically in a folder named `files` with a prefix id by default to avoid file overwrites. The auto generated ID can be disabled by setting `uploadFile` method paramteter `generateID` to `false`. You can also set a custom `folder` or `fileName` if needed.
+Files will be uploaded automatically in a folder named `files` with a prefix id by default to avoid file overwrites. The auto generated ID can be disabled by setting the method paramteter `generateID` (the one from `uploadFile`) to `false`. You can also set a custom `folder` or `fileName` if needed.
 
 ```js
 
@@ -201,8 +200,8 @@ f.AUTH.onAuthStateChanged(user => {
     else logged = false 
 })
 ```
-Save `logged` variable to the store of your choosed front-end framework.
-Later, you can check based on `logged` variable if the user is logged in or not.
+Save `logged` variable to the store of your chosen front-end framework.
+Later, you can check, based on `logged` variable, if the user is logged in or not.
 
 
 ### Login/Register user (with Facebook, Google)
@@ -214,7 +213,7 @@ f.facebookLogin()
 f.googleLogin()
 
 ```
-This methods will automatically create if not present a `users` collection and save email and name in a document with user's id (`uid`).
+This methods will automatically create (if not already present) a `users` collection and it'll save the email and the name in a document with the user's id (`uid`).
 
 
 ### Logout user
@@ -230,7 +229,6 @@ f.logoutUser()
 f.deleteUser()
 
 ```
-
 
 
 # TODO
