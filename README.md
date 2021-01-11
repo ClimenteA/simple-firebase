@@ -76,8 +76,13 @@ The `add` method will return the ID of the generated document so you can do adit
 
 ```js
 
-let myOldDoc = {"field_1": "value_1"}
-let myNewDoc = {"field_1": "value_1_updated"}
+let myOldDoc = {
+    "field_1": 
+    "value_1"
+}
+let myNewDoc = {
+    "field_1": "value_1_updated"
+}
 
 let updated_ids = await f.update("collectionName", myOldDoc, myNewDoc)
 
@@ -103,7 +108,11 @@ This will the document with the `"_id"` specified.
 
 ```js   
 
-let fDoc = {"field_2": "value_2_updated"}
+let fDoc = {
+    "field_2": 
+    "value_2_updated"
+}
+
 let docList = await f.find("collectionName", fDoc)
 
 ```
@@ -122,7 +131,10 @@ You can also fetch a document from a colection by it's ID.
 
 ```js
 
-let dDoc = {"field_2": "value_2_updated"}
+let dDoc = {
+    "field_2": "value_2_updated"
+}
+
 let deleted_ids = await f.delete("collectionName", dDoc)
 
 ```
