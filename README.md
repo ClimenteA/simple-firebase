@@ -76,8 +76,7 @@ The `add` method will return the ID of the generated document so you can do addi
 ```js
 
 let myOldDoc = {
-    "field_1": 
-    "value_1"
+    "field_1": "value_1"
 }
 let myNewDoc = {
     "field_1": "value_1_updated"
@@ -93,8 +92,7 @@ This will update the document(s) in the collection where `field_1` has `value_1`
 
 let myNewDoc1 = {
     "_id": custom_id, 
-    "field_2": 
-    "value_2_updated"
+    "field_2": "value_2_updated"
 }
 
 let updated_id = await f.update("collectionName", myNewDoc1)
@@ -108,8 +106,7 @@ This will update the document with the `"_id"` specified.
 ```js   
 
 let fDoc = {
-    "field_2": 
-    "value_2_updated"
+    "field_2": "value_2_updated"
 }
 
 let docList = await f.find("collectionName", fDoc)
